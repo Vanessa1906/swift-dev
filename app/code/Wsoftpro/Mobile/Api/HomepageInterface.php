@@ -9,7 +9,7 @@
 namespace Wsoftpro\Mobile\Api;
 
 
-interface  ApiInterface
+interface  HomepageInterface
 {
     /**
      * Returns greeting message to user

@@ -22,7 +22,7 @@
 
 namespace Wsoftpro\Mobile\Helper;
 use Magento\Framework\App\Helper\Context;
-use Wsoftpro\Mobile\Api\ApiInterface;
+use Wsoftpro\Mobile\Api\HomepageInterface;
 
 /**
  * Helper Data.
@@ -31,7 +31,7 @@ use Wsoftpro\Mobile\Api\ApiInterface;
  * @module   Storepickup
  * @author   Magestore Developer
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper implements ApiInterface
+class Data extends \Magento\Framework\App\Helper\AbstractHelper implements HomepageInterface
 {
     protected $_custom;
     protected $_storeManager;
@@ -81,39 +81,39 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements ApiIn
                 $data['MediaUrl'] = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
                 $data['GatEnable'] = $this->_helperCustom->isGatEnabled();
                 $data['MobileBreakPoint'] = $this->_helperCustom->getMobileBreakPoint();
-                $slider[$key] = array(
-                    'typeSlider' => $data['sliderConfig']['slider_config']['title'],
-                    'bannerConfig'  => array(
-                        'title' => array(
-                            'text' => $data['sliderConfig']['banner_config']['title'],
-                            'color' => $data['sliderConfig']['banner_config']['color_title']
-                        ),
-                        'desc' => array(
-                            'text' => $data['sliderConfig']['banner_config']['description'],
-                            'color' => $data['sliderConfig']['banner_config']['color_description']
-                        ),
-                        'notify' => array(
-                            'text' => $data['sliderConfig']['banner_config']['notify'],
-                            'color' => $data['sliderConfig']['banner_config']['color_notify']
-                        ),
-                        'subDesc' => array(
-                            'text' => $data['sliderConfig']['banner_config']['sub_desc'],
-                            'color' => $data['sliderConfig']['banner_config']['color_subdesc']
-                        ),
-                        'action' => array(
-                            'url' => $data['sliderConfig']['banner_config']['url'],
-                            'buttonText' => $data['sliderConfig']['banner_config']['button_text'],
-                            'buttonColor'=> $data['sliderConfig']['banner_config']['button_color'],
-                            'backgroundColor' => $data['sliderConfig']['banner_config']['background_color'],
-                            'borderColor' => $data['sliderConfig']['banner_config']['border_color']
-                        )
-                    )
-
-
-                );
+//                $slider[$key] = array(
+//                    'typeSlider' => $data['sliderConfig']['slider_config']['title'],
+//                    'bannerConfig'  => array(
+//                        'title' => array(
+//                            'text' => $data['sliderConfig']['banner_config']['title'],
+//                            'color' => $data['sliderConfig']['banner_config']['color_title']
+//                        ),
+//                        'desc' => array(
+//                            'text' => $data['sliderConfig']['banner_config']['description'],
+//                            'color' => $data['sliderConfig']['banner_config']['color_description']
+//                        ),
+//                        'notify' => array(
+//                            'text' => $data['sliderConfig']['banner_config']['notify'],
+//                            'color' => $data['sliderConfig']['banner_config']['color_notify']
+//                        ),
+//                        'subDesc' => array(
+//                            'text' => $data['sliderConfig']['banner_config']['sub_desc'],
+//                            'color' => $data['sliderConfig']['banner_config']['color_subdesc']
+//                        ),
+//                        'action' => array(
+//                            'url' => $data['sliderConfig']['banner_config']['url'],
+//                            'buttonText' => $data['sliderConfig']['banner_config']['button_text'],
+//                            'buttonColor'=> $data['sliderConfig']['banner_config']['button_color'],
+//                            'backgroundColor' => $data['sliderConfig']['banner_config']['background_color'],
+//                            'borderColor' => $data['sliderConfig']['banner_config']['border_color']
+//                        )
+//                    )
+//
+//
+//                );
             }
         }
-        return $slider;
+        return $data;
     }
 
     public function getTypeProduct(){
@@ -171,7 +171,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements ApiIn
 
     public function getHomepage()
     {
-        return $this->getSliderData();
+        return json_encode($this->getSliderData());
     }
 
 
