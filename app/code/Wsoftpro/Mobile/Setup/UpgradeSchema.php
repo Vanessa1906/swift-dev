@@ -98,6 +98,16 @@ class UpgradeSchema implements  UpgradeSchemaInterface
                     'comment' => 'Type Slider'
                 ]);
         }
+        if (version_compare($context->getVersion(), '1.0.3') < 0) {
+            $setup->getConnection()->addColumn($setup->getTable('weltpixel_owlcarouselslider_banners'),
+                'type_banner',
+                [
+                    'type' => Table::TYPE_TEXT,
+                    'length' => 255,
+                    'nullable' => true,
+                    'comment' => 'Type Banner'
+                ]);
+        }
         $setup->endSetup();
     }
 }

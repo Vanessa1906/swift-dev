@@ -3,6 +3,8 @@ namespace Wsoftpro\Mobile\Block\Adminhtml\Banner\Edit\Tab;
 
 class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Tab\Banner
 {
+    const BANNER_ONE  = 101;
+    const BANNER_TOW  = 102;
 
     /**
      * Prepare form.
@@ -12,8 +14,20 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
     protected function _prepareForm()
     {
         parent::_prepareForm();
+        $dataObj = $this->_objectFactory->create();
+
         $form = $this->getForm();
+        $bannerModel = $this->_coreRegistry->registry('banner');
+        if ($sliderId = $this->getRequest()->getParam('loaded_slider_id')) {
+            $bannerModel->setSliderId($sliderId);
+        }
+
+        $form->setHtmlIdPrefix($this->_bannerModel->getFormFieldHtmlIdPrefix());
         $fieldset = $form->getElement('base_fieldset');
+        if ($bannerModel->getId()) {
+            $fieldset->removeField('id');
+            $fieldset->addField('id', 'hidden', ['name' => 'id']);
+        }
         $fieldset->addField(
             'color_title',
             'text',
@@ -89,14 +103,33 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
         );
         $fieldset->addField(
             'border_color',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'border_color',
                 'label'    => __('Color Border Button'),
                 'title'    => __('Color Border Button'),
             ]
         );
+        $fieldset->addField(
+            'type_banner',
+            'select',
+            [
+                'name'     => 'type_banner',
+                'label'    => __('Type Banner'),
+                'title'    => __('Type Banner'),
+                'options' => $this->getTypeBanner(),
+            ]
+        );
+        $form->addValues($bannerModel->getData());
+        $this->setForm($form);
         return \Magento\Backend\Block\Widget\Form::_prepareForm();
+    }
+    public function getTypeBanner()
+    {
+        return [
+            self::BANNER_ONE  => __('Banner 1'),
+            self::BANNER_TOW  => __('Banner 2'),
+        ];
     }
 
 }

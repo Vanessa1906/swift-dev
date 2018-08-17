@@ -72,18 +72,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         return $matches;
     }
     public function getSliderData(){
+        $dataArr = array(); //biggest container.
+
         $contentHomepage = $this->_collectionFactory->create()->addFilter('title','Home Page')->getFirstItem()->getData('content');
         $arrayStringHomepage = explode('</p>',$contentHomepage);
         $sliderId = 'slider_id';
         $productType = "products_type";
         foreach ($arrayStringHomepage as $ids => $value){
             if(strpos($value, $sliderId)){
+                $slider = array();
+                $slider['data'] = array();
+                $slider['type'] = "10";
                 $idSlider =  preg_replace('/[^0-9]/', '', $value);
                 $data['sliderConfig'][$ids] = $this->_helperCustom->getSliderConfigOptions($idSlider)->getData();
                 $banners = $data['sliderConfig'][$ids]['banner_config'];
-                foreach ($banners as $key => $banner){
-                    $slider[$key] = array(
-                        'bannerConfig'  => array(
+                $item = array();
+                    foreach ($banners as $key => $banner){
+                        $item = array(
+                            'type' => $banner['type_banner'],
+                            'imageUrl' => $banner['image'],
                             'title' => array(
                                 'text' => $banner['title'],
                                 'color' => $banner['color_title']
@@ -107,25 +114,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
                                 'backgroundColor' => $banner['background_color'],
                                 'borderColor' => $banner['border_color']
                             )
-                        )
+
+                        );
+                        array_push($slider['data'],$item);
 
 
-                    );
+                    }
 
+                if(count($banners) > 1){
+                    array_push($dataArr,$slider);
+                    $slider = null;
+                }else{
+                    array_push($dataArr,$item);
+                    $a = 1;
                 }
 
-                $result[$ids] = $slider;
-                $slider = [];
+
 
 
             }elseif(strpos($value, $productType)){
-                $result[$ids] = $this->getProductbestsell();
+                $productArr = $this->getProductbestsell();
+                array_push($dataArr,$productArr);
             }
 
 
 
         }
-        return $result;
+        return $dataArr;
     }
 
     public function getTypeProduct(){
