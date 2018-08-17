@@ -80,11 +80,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $productType = "products_type";
         foreach ($arrayStringHomepage as $ids => $value){
             if(strpos($value, $sliderId)){
-                $slider = array();
-                $slider['data'] = array();
-                $slider['type'] = "10";
+
                 $idSlider =  preg_replace('/[^0-9]/', '', $value);
                 $data['sliderConfig'][$ids] = $this->_helperCustom->getSliderConfigOptions($idSlider)->getData();
+                $slider = array();
+                $slider['data'] = array();
+                $slider['type'] = $data['sliderConfig'][$ids]['slider_config']['type_slider'];
                 $banners = $data['sliderConfig'][$ids]['banner_config'];
                 $item = array();
                     foreach ($banners as $key => $banner){
@@ -116,24 +117,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
                             )
 
                         );
-                        array_push($slider['data'],$item);
+                        if($slider['type'] == 20){
+                            array_push($slider['data'],$item);
+                            break;
+                        }else{
+                            array_push($slider['data'],$item);
+                        }
+
+
 
 
                     }
 
-                if(count($banners) > 1){
-                    array_push($dataArr,$slider);
-                    $slider = null;
-                }else{
-                    array_push($dataArr,$item);
-                    $a = 1;
-                }
+                array_push($dataArr,$slider);
+                $slider = null;
 
 
 
 
             }elseif(strpos($value, $productType)){
-                $productArr = $this->getProductbestsell();
+                $productArr = $this->getProducts($value);
                 array_push($dataArr,$productArr);
             }
 
@@ -146,35 +149,55 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
     public function getTypeProduct(){
 
     }
-    public function getProductbestsell()
+    public function getProducts($value)
     {
 
         $data = [];
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $resourceCollection = $objectManager->create('Wsoftpro\Mobile\Block\Slider\Products');
-        $_collection = $this->_productCollectionFactory->create();
-
-        $config_homepage = $this->_collectionFactory->create()->addFilter('title','Home Page')->getFirstItem()->getData();
-
-        $config = $config_homepage['content'];
-        if(strpos($config,'"bestsell_products"')){
+        $_collection = $this->_productCollectionFactory->create()->addAttributeToSelect('title_rewrite');
+        $data['type'] = "30";
+        $data['title'] = array();
+        if(strpos($value,'"bestsell_products"')){
             $type ="bestsell_products";
             $products = $resourceCollection->useGetBestsellProductCollection($_collection);
-            $data['config']= $this->getSliderConfigOptions($type);
-            if($products){
-                $key = 0;
-                foreach ($products as $product){
-                    $data['product'][$key]['image'] = $product->getId();
-                    $data['product'][$key]['image'] =  $product->getImage();
-                    $data['product'][$key]['url']  = $product->getUrlModel()->getUrl($product);
-                    $data['product'][$key]['name']  =  $product->getName();
-                    $data['product'][$key]['price']  = $product->getPrice();
-                    $data['product'][$key]['addtocarturl']  = $this->getAddToCartUrl($product);
-                    $data['product'][$key]['addtowishlistparams'] = $this->getAddToWishlistParams($product);
-                    $key++;
-                }
-            }
+        }elseif(strpos($value,'"new_products"')){
+            $type ="new_products";
+            $products = $resourceCollection->useGetNewProductCollection($_collection);
+        }elseif(strpos($value,'"sell_products"')){
+            $type ="sell_products";
+            $products = $resourceCollection->useGetSellProductCollection($_collection);
+        }elseif(strpos($value,'"recently_viewed"')){
+            $type ="recently_viewed";
+            $products = $resourceCollection->useGetRecentlyViewedCollection($_collection);
+        }elseif(strpos($value,'"related_products"')){
+            $type ="related_products";
+            $products = $resourceCollection->getProductCollectionRelated();
+        }elseif(strpos($value,'"upsell_products"')){
+            $type ="upsell_products";
+            $products = $resourceCollection->getProductCollectionUpSell();
+        }elseif(strpos($value,'"crosssell_products"')){
+            $type ="crosssell_products";
+            $products = $resourceCollection->getProductCollectionCrossSell();
         }
+        $config = $this->getSliderConfigOptions($type);
+        $data['title'] = $config['title'];
+        if($products){
+            $key = 0;
+            foreach ($products as $product){
+                $data['product'][$key]['id'] = $product->getId();
+                $data['product'][$key]['title'] =  $product->getTitleRewrite();
+                $data['product'][$key]['image'] =  $product->getImage();
+                $data['product'][$key]['url']  = $product->getUrlModel()->getUrl($product);
+                $data['product'][$key]['name']  =  $product->getName();
+                $data['product'][$key]['price']  = $product->getPrice();
+                $data['product'][$key]['addtocarturl']  = $this->getAddToCartUrl($product);
+                $data['product'][$key]['addtowishlistparams'] = $this->getAddToWishlistParams($product);
+                $key++;
+            }
+
+        }
+
 
         return $data;
 
@@ -198,7 +221,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
 
     public function getHomepage()
     {
-        return json_encode($this->getSliderData(), true);
+        echo json_encode($this->getSliderData(), true);
     }
 
 

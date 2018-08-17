@@ -6,7 +6,9 @@ class Form extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Slider\Edit\Tab\
 {
     protected $_typeslider;
     protected $_fieldFactory;
-    const SLIDER_ONE  = 10;
+    const BANNER  = 20;
+    const SLIDER  = 10;
+
 
     /**
      * [$_bannersliderHelper description].
@@ -56,7 +58,8 @@ class Form extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Slider\Edit\Tab\
     public function getTypeSlider()
     {
         return [
-            self::SLIDER_ONE  => __('Slider 1'),
+            self::SLIDER  => __('Type Slider'),
+            self::BANNER  => __('Type Banner'),
         ];
     }
 

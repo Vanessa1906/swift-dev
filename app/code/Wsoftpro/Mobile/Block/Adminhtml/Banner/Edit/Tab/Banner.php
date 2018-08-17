@@ -3,8 +3,13 @@ namespace Wsoftpro\Mobile\Block\Adminhtml\Banner\Edit\Tab;
 
 class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Tab\Banner
 {
-    const BANNER_ONE  = 101;
-    const BANNER_TOW  = 102;
+    const BANNER_ONE  = 40;
+    const BANNER_TWO  = 50;
+    const BANNER_THREE  = 60;
+    const BANNER_FOUR  = 70;
+    const BANNER_FIVE  = 80;
+    const BANNER_SLIDER_ONE  = 101;
+    const BANNER_SLIDER_TWO  = 102;
 
     /**
      * Prepare form.
@@ -127,8 +132,13 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
     public function getTypeBanner()
     {
         return [
-            self::BANNER_ONE  => __('Banner 1'),
-            self::BANNER_TOW  => __('Banner 2'),
+            self::BANNER_ONE  => __('Banner Type 1'),
+            self::BANNER_TWO  => __('Banner Type 2'),
+            self::BANNER_THREE  => __('Banner Type 3'),
+            self::BANNER_FOUR  => __('Banner Type 4'),
+            self::BANNER_FIVE  => __('Banner Type 5'),
+            self::BANNER_SLIDER_ONE  => __('Banner Type 6'),
+            self::BANNER_SLIDER_TWO  => __('Banner Type 7'),
         ];
     }
 

@@ -13,4 +13,7 @@
     <preference for="WeltPixel\OwlCarouselSlider\Helper\Custom"
                 type="Wsoftpro\Mobile\Helper\Custom" />
 
+    <preference for="WeltPixel\OwlCarouselSlider\Controller\Adminhtml\Slider\Save"
+                type="Wsoftpro\Mobile\Controller\Adminhtml\Slider\Save" />
+
 </config>
