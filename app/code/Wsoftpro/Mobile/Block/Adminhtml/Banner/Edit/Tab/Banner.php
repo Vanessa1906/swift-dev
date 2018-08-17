@@ -16,7 +16,7 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
         $fieldset = $form->getElement('base_fieldset');
         $fieldset->addField(
             'color_title',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'color_title',
                 'label'    => __('Title Color'),
@@ -26,7 +26,7 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
 
         $fieldset->addField(
             'color_description',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'color_description',
                 'label'    => __('Description Color'),
@@ -35,7 +35,7 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
         );
         $fieldset->addField(
             'color_notify',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'color_notify',
                 'label'    => __('Color Notify'),
@@ -53,7 +53,7 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
         );
         $fieldset->addField(
             'color_subdesc',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'color_subdesc',
                 'label'    => __('Color Sub Description'),
@@ -71,7 +71,7 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
         );
         $fieldset->addField(
             'button_color',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'button_color',
                 'label'    => __('Color for Button'),
@@ -80,7 +80,7 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
         );
         $fieldset->addField(
             'background_color',
-            'Wsoftpro\Mobile\Block\Color\Input\Color',
+            'text',
             [
                 'name'     => 'background_color',
                 'label'    => __('Color Background'),

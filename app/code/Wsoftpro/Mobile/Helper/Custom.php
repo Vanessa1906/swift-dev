@@ -1,0 +1,132 @@
+<?php
+
+namespace Wsoftpro\Mobile\Helper;
+
+/**
+ * Helper Custom Slider
+ * @category WeltPixel
+ * @package  WeltPixel_OwlCarouselSlider
+ * @module   OwlCarouselSlider
+ * @author   WeltPixel Developer
+ */
+class Custom extends \WeltPixel\OwlCarouselSlider\Helper\Custom
+{
+
+
+    protected $_configFieldsSlider;
+
+    protected $_configFieldsBanner;
+
+    protected $_sliderId;
+
+    public function getSliderConfigOptions($sliderId)
+    {
+        if($this->_sliderId != $sliderId && is_null($this->_configFieldsSlider)) {
+
+            $this->_sliderId = $sliderId;
+
+            $this->_configFieldsSlider = [
+                'title',
+                'show_title',
+                'status',
+                'nav',
+                'dots',
+                'center',
+                'items',
+                'loop',
+                'margin',
+                'merge',
+                'URLhashListener',
+                'stagePadding',
+                'lazyLoad',
+                'transition',
+                'autoplay',
+                'autoplayTimeout',
+                'autoplayHoverPause',
+                'autoHeight',
+                'nav_brk1',
+                'items_brk1',
+                'nav_brk2',
+                'items_brk2',
+                'nav_brk3',
+                'items_brk3',
+                'nav_brk4',
+                'items_brk4',
+            ];
+        }
+        if(is_null($this->_configFieldsBanner)) {
+            $this->_configFieldsBanner = [
+                'id',
+                'title',
+                'show_title',
+                'description',
+                'show_description',
+                'status',
+                'url',
+                'banner_type',
+                'image',
+                'mobile_image',
+                'video',
+                'custom',
+                'alt_text',
+                'target',
+                'button_text',
+                'custom_content',
+                'custom_css',
+                'valid_from',
+                'valid_to',
+                'ga_promo_id',
+                'ga_promo_name',
+                'ga_promo_creative',
+                'ga_promo_position',
+                'color_title',
+                'color_description',
+                'color_notify',
+                'notify',
+                'color_subdesc',
+                'subdesc',
+                'button_color',
+                'background_color',
+                'border_color',
+                'type'
+            ];
+        }
+
+        /* @var \WeltPixel\OwlCarouselSlider\Model\Slider $slider */
+        $slider = $this->_sliderModel->load($sliderId);
+
+        if (!count($this->_configFieldsSlider)) {
+            return new \Magento\Framework\DataObject();
+        }
+
+        $sliderConfig = [];
+        foreach ($this->_configFieldsSlider as $field) {
+            $sliderConfig[$field] = $slider->getData($field);
+        }
+
+        $sliderBannersCollection = $slider->getSliderBanerCollection();
+        $sliderBannersCollection->setOrder('sort_order', 'ASC');
+
+        $bannerConfig = [];
+        foreach ($sliderBannersCollection as $banner) {
+
+            if (!$this->validateBannerDisplayDate($banner) || !$banner->getStatus()) {
+                continue;
+            }
+
+            $bannerDetails = [];
+            foreach ($this->_configFieldsBanner as $field) {
+                $bannerDetails[$field] = $banner->getData($field);
+            }
+            $bannerConfig[$banner->getId()] = $bannerDetails;
+        }
+
+        $configData = new \Magento\Framework\DataObject();
+
+        $configData->setSliderConfig($sliderConfig);
+        $configData->setBannerConfig($bannerConfig);
+
+        return $configData;
+    }
+
+}

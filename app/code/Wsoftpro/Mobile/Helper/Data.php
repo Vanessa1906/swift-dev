@@ -51,7 +51,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         \WeltPixel\OwlCarouselSlider\Block\Slider\Custom $custom,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Cms\Model\ResourceModel\Page\Grid\CollectionFactory  $collectionFactory,
-        array $data = []
+        array $data = [],
+        array $slider = [],
+        array $result = []
 
     )
     {
@@ -73,47 +75,57 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $contentHomepage = $this->_collectionFactory->create()->addFilter('title','Home Page')->getFirstItem()->getData('content');
         $arrayStringHomepage = explode('</p>',$contentHomepage);
         $sliderId = 'slider_id';
-        foreach ($arrayStringHomepage as $value){
+        $productType = "products_type";
+        foreach ($arrayStringHomepage as $ids => $value){
             if(strpos($value, $sliderId)){
-                $key =  preg_replace('/[^0-9]/', '', $value);
-                $data['sliderConfig'] = $this->_helperCustom->getSliderConfigOptions($key)->getData();
-                $data['Breakpoint'] = $this->_helperCustom->getBreakpointConfiguration();
-                $data['MediaUrl'] = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
-                $data['GatEnable'] = $this->_helperCustom->isGatEnabled();
-                $data['MobileBreakPoint'] = $this->_helperCustom->getMobileBreakPoint();
-//                $slider[$key] = array(
-//                    'typeSlider' => $data['sliderConfig']['slider_config']['title'],
-//                    'bannerConfig'  => array(
-//                        'title' => array(
-//                            'text' => $data['sliderConfig']['banner_config']['title'],
-//                            'color' => $data['sliderConfig']['banner_config']['color_title']
-//                        ),
-//                        'desc' => array(
-//                            'text' => $data['sliderConfig']['banner_config']['description'],
-//                            'color' => $data['sliderConfig']['banner_config']['color_description']
-//                        ),
-//                        'notify' => array(
-//                            'text' => $data['sliderConfig']['banner_config']['notify'],
-//                            'color' => $data['sliderConfig']['banner_config']['color_notify']
-//                        ),
-//                        'subDesc' => array(
-//                            'text' => $data['sliderConfig']['banner_config']['sub_desc'],
-//                            'color' => $data['sliderConfig']['banner_config']['color_subdesc']
-//                        ),
-//                        'action' => array(
-//                            'url' => $data['sliderConfig']['banner_config']['url'],
-//                            'buttonText' => $data['sliderConfig']['banner_config']['button_text'],
-//                            'buttonColor'=> $data['sliderConfig']['banner_config']['button_color'],
-//                            'backgroundColor' => $data['sliderConfig']['banner_config']['background_color'],
-//                            'borderColor' => $data['sliderConfig']['banner_config']['border_color']
-//                        )
-//                    )
-//
-//
-//                );
+                $idSlider =  preg_replace('/[^0-9]/', '', $value);
+                $data['sliderConfig'][$ids] = $this->_helperCustom->getSliderConfigOptions($idSlider)->getData();
+                $banners = $data['sliderConfig'][$ids]['banner_config'];
+                foreach ($banners as $key => $banner){
+                    $slider[$key] = array(
+                        'bannerConfig'  => array(
+                            'title' => array(
+                                'text' => $banner['title'],
+                                'color' => $banner['color_title']
+                            ),
+                            'desc' => array(
+                                'text' => $banner['description'],
+                                'color' => $banner['color_description']
+                            ),
+                            'notify' => array(
+                                'text' => $banner['notify'],
+                                'color' => $banner['color_notify']
+                            ),
+                            'subDesc' => array(
+                                'text' => $banner['subdesc'],
+                                'color' => $banner['color_subdesc']
+                            ),
+                            'action' => array(
+                                'url' => $banner['url'],
+                                'buttonText' => $banner['button_text'],
+                                'buttonColor'=> $banner['button_color'],
+                                'backgroundColor' => $banner['background_color'],
+                                'borderColor' => $banner['border_color']
+                            )
+                        )
+
+
+                    );
+
+                }
+
+                $result[$ids] = $slider;
+                $slider = [];
+
+
+            }elseif(strpos($value, $productType)){
+                $result[$ids] = $this->getProductbestsell();
             }
+
+
+
         }
-        return $data;
+        return $result;
     }
 
     public function getTypeProduct(){
@@ -171,7 +183,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
 
     public function getHomepage()
     {
-        return json_encode($this->getSliderData());
+        return json_encode($this->getSliderData(), true);
     }
 
 

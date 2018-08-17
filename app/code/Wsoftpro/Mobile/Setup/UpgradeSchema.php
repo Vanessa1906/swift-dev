@@ -88,6 +88,16 @@ class UpgradeSchema implements  UpgradeSchemaInterface
                     'comment' => 'Color Border Button'
                 ]);
         }
+        if (version_compare($context->getVersion(), '1.0.2') < 0) {
+            $setup->getConnection()->addColumn($setup->getTable('weltpixel_owlcarouselslider_sliders'),
+                'type_slider',
+                [
+                    'type' => Table::TYPE_TEXT,
+                    'length' => 255,
+                    'nullable' => true,
+                    'comment' => 'Type Slider'
+                ]);
+        }
         $setup->endSetup();
     }
 }
