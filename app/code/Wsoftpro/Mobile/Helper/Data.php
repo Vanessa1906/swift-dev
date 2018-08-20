@@ -70,7 +70,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         preg_match_all('/^[0-9]*$/', $str, $matches);
         return $matches;
     }
-    public function getSliderData(){
+    public function getHomeData(){
         $dataArr = array(); //biggest container.
         $mediaUrl = $this ->_storeManager-> getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
         $contentHomepage = $this->_collectionFactory->create()->addFilter('title','Home Page')->getFirstItem()->getData('content');
@@ -203,17 +203,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         }
         $config = $this->getSliderConfigOptions($type);
         $data['title'] = $config['title'];
-        if($products){
+        $data['title'] = $config['title'];
+        if($products && is_array($products) && count($products) > 1){
             $key = 0;
-            foreach ($products as $product){
-                $data['product'][$key]['id'] = $product->getId();
-                $data['product'][$key]['title'] =  $product->getTitleRewrite();
-                $data['product'][$key]['image'] =  $product->getImage();
-                $data['product'][$key]['url']  = $product->getUrlModel()->getUrl($product);
-                $data['product'][$key]['name']  =  $product->getName();
-                $data['product'][$key]['price']  = $product->getPrice();
-                $data['product'][$key]['addtocarturl']  = $this->getAddToCartUrl($product);
-                $data['product'][$key]['addtowishlistparams'] = $this->getAddToWishlistParams($product);
+            foreach($products as $product){
+                $data['products'][$key]['id'] = $product->getId();
+                $data['products'][$key]['title'] =  $product->getTitleRewrite();
+                $data['products'][$key]['image'] =  $product->getImage();
+                $data['products'][$key]['url']  = $product->getUrlModel()->getUrl($product);
+                $data['products'][$key]['name']  =  $product->getName();
+                $data['products'][$key]['price']  = $product->getPrice();
+                $data['products'][$key]['addtocarturl']  = $this->getAddToCartUrl($product);
+                $data['products'][$key]['addtowishlistparams'] = $this->getAddToWishlistParams($product);
                 $key++;
             }
 
@@ -244,7 +245,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
     {
         // Use Return instead of echo for getting response as JSON String.
         // In Request, Accept and Content-Type must set to 'application/json'
-        return json_encode($this->getSliderData(), true);
+        return json_encode($this->getHomeData(), true);
     }
 
 
