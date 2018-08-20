@@ -42,7 +42,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
     protected $context;
     protected $resultJsonFactory;
     public function __construct(
-
         \WeltPixel\OwlCarouselSlider\Helper\Custom $helperCustom,
         \WeltPixel\OwlCarouselSlider\Helper\Products $helperProducts,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsCollectionFactory,
@@ -73,7 +72,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
     }
     public function getSliderData(){
         $dataArr = array(); //biggest container.
-
+        $mediaUrl = $this ->_storeManager-> getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
         $contentHomepage = $this->_collectionFactory->create()->addFilter('title','Home Page')->getFirstItem()->getData('content');
         $arrayStringHomepage = explode('</p>',$contentHomepage);
         $sliderId = 'slider_id';
@@ -85,43 +84,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
                 $data['sliderConfig'][$ids] = $this->_helperCustom->getSliderConfigOptions($idSlider)->getData();
                 $slider = array();
                 $slider['data'] = array();
-                $slider['type'] = $data['sliderConfig'][$ids]['slider_config']['type_slider'];
+                $slider['type'] = (int)$data['sliderConfig'][$ids]['slider_config']['type_slider'];
                 $banners = $data['sliderConfig'][$ids]['banner_config'];
                 $item = array();
                     foreach ($banners as $key => $banner){
                         $item = array(
-                            'type' => $banner['type_banner'],
-                            'imageUrl' => $banner['image'],
+                            'type' => (int)$banner['type_banner'],
+                            'imageURL' => $mediaUrl.$banner['image'],
                             'title' => array(
                                 'text' => $banner['title'],
-                                'color' => $banner['color_title']
+                                'color' => $this->rgb2HEXhtml($banner['color_title'])
                             ),
                             'desc' => array(
                                 'text' => $banner['description'],
-                                'color' => $banner['color_description']
+                                'color' => $this->rgb2HEXhtml($banner['color_description']),
                             ),
                             'notify' => array(
                                 'text' => $banner['notify'],
-                                'color' => $banner['color_notify']
+                                'color' => $this->rgb2HEXhtml($banner['color_notify'])
                             ),
                             'subDesc' => array(
                                 'text' => $banner['subdesc'],
-                                'color' => $banner['color_subdesc']
+                                'color' => $this->rgb2HEXhtml($banner['color_subdesc'])
                             ),
                             'action' => array(
                                 'url' => $banner['url'],
                                 'buttonText' => $banner['button_text'],
-                                'buttonColor'=> $banner['button_color'],
-                                'backgroundColor' => $banner['background_color'],
-                                'borderColor' => $banner['border_color']
+                                'buttonColor'=> $this->rgb2HEXhtml($banner['button_color']),
+                                'backgroundColor' => $this->rgb2HEXhtml($banner['background_color']),
+                                'borderColor' => $this->rgb2HEXhtml($banner['border_color'])
                             )
 
                         );
+                        array_push($slider['data'],$item);
                         if($slider['type'] == 20){
                             array_push($slider['data'],$item);
                             break;
-                        }else{
-                            array_push($slider['data'],$item);
                         }
 
 
@@ -146,9 +144,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         return $dataArr;
     }
 
-    public function getTypeProduct(){
+    function rgb2HEXhtml($rgba)
+    {
+        $rgbaArray = explode(',',$rgba);
+        $opacity = 1;
+        if(isset($rgbaArray[3])){
+            $opacity = $rgbaArray[3];
+        }
 
+        $r = implode(',',$rgbaArray);
+         $g=-1;
+         $b=-1;
+        if (is_array($r) && sizeof($r) == 3)
+            list($r, $g, $b) = $r;
+        $r = intval($r); $g = intval($g);
+        $b = intval($b);
+        $r = dechex($r<0?0:($r>255?255:$r));
+        $g = dechex($g<0?0:($g>255?255:$g));
+        $b = dechex($b<0?0:($b>255?255:$b));
+        $color = (strlen($r) < 2?'0':'').$r;
+        $color .= (strlen($g) < 2?'0':'').$g;
+        $color .= (strlen($b) < 2?'0':'').$b;
+        $color ='#'.$color. "." .$opacity;
+        return $color;
     }
+//you should pass r,g,b value and call function
+
     public function getProducts($value)
     {
 

@@ -137,8 +137,8 @@ class Banner extends \WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Ta
             self::BANNER_THREE  => __('Banner Type 3'),
             self::BANNER_FOUR  => __('Banner Type 4'),
             self::BANNER_FIVE  => __('Banner Type 5'),
-            self::BANNER_SLIDER_ONE  => __('Banner Type 6'),
-            self::BANNER_SLIDER_TWO  => __('Banner Type 7'),
+            self::BANNER_SLIDER_ONE  => __('Banner Slider Type 1'),
+            self::BANNER_SLIDER_TWO  => __('Banner Slider Type 2'),
         ];
     }
 
