@@ -65,21 +65,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $this->_cartHelper = $context->getCartHelper();
         $this->resultJsonFactory = $resultJsonFactory;
     }
-    function get_numerics ($str) {
-
-        preg_match_all('/^[0-9]*$/', $str, $matches);
-        return $matches;
-    }
+    /**
+     *  get data Home page
+     *  return array
+     * */
     public function getHomeData(){
         $dataArr = array(); //biggest container.
         $mediaUrl = $this ->_storeManager-> getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
+        /*get home page content in static block title Home page*/
         $contentHomepage = $this->_collectionFactory->create()->addFilter('title','Home Page')->getFirstItem()->getData('content');
         $arrayStringHomepage = explode('</p>',$contentHomepage);
         $sliderId = 'slider_id';
         $productType = "products_type";
         foreach ($arrayStringHomepage as $ids => $value){
             if(strpos($value, $sliderId)){
-
                 $idSlider =  preg_replace('/[^0-9]/', '', $value);
                 $data['sliderConfig'][$ids] = $this->_helperCustom->getSliderConfigOptions($idSlider)->getData();
                 $slider = array();
@@ -143,6 +142,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         }
         return $dataArr;
     }
+    /**
+     *  @param $rgba
+     *  covert rgba to hex
+     *  return string
+     */
 
     function rgb2HEXhtml($rgba)
     {
@@ -165,11 +169,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $color = (strlen($r) < 2?'0':'').$r;
         $color .= (strlen($g) < 2?'0':'').$g;
         $color .= (strlen($b) < 2?'0':'').$b;
-        $color ='#'.$color. "." .$opacity;
+        $color =$color. "," .$opacity;
         return $color;
     }
-//you should pass r,g,b value and call function
 
+    /**
+     * @param $value
+     * get product by type $value
+     * @return array
+     *
+     */
     public function getProducts($value)
     {
 
@@ -204,7 +213,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $config = $this->getSliderConfigOptions($type);
         $data['title'] = $config['title'];
         $data['title'] = $config['title'];
-        if($products && is_array($products) && count($products) > 1){
+        if($products && is_array($products->getData()) && count($products->getData()) > 1){
             $key = 0;
             foreach($products as $product){
                 $data['products'][$key]['id'] = $product->getId();
@@ -224,6 +233,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         return $data;
 
     }
+
+    /**
+     * @param $product
+     * return string
+     * */
     public function getAddToCartUrl($product, $additional = [])
     {
         return $this->_cartHelper->getAddUrl($product, $additional);
@@ -236,11 +250,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $data = $resource->getAddToWishlistParams($product);
         return $data;
     }
+    /**
+     * $param $type
+     * get slider config in admin page
+     * return array
+     *
+     * */
     public function getSliderConfigOptions($type){
         return  $this->_helperProducts->getSliderConfigOptions($type);
     }
 
-
+    /**
+     * get Homepage data
+     * return type json
+     *
+     * */
     public function getHomepage()
     {
         // Use Return instead of echo for getting response as JSON String.
