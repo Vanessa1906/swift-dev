@@ -242,7 +242,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
 
     public function getHomepage()
     {
-        echo json_encode($this->getSliderData(), true);
+        // Use Return instead of echo for getting response as JSON String.
+        // In Request, Accept and Content-Type must set to 'application/json'
+        return json_encode($this->getSliderData(), true);
     }
 
 
