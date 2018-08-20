@@ -148,31 +148,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
      *  return string
      */
 
+
     function rgb2HEXhtml($rgba)
     {
+
         $rgbaArray = explode(',',$rgba);
         $opacity = 1;
-        if(isset($rgbaArray[3])){
-            $opacity = $rgbaArray[3];
+        //if something unpredictable, fallback to white with hex code of FFF and alpha = 1
+        $color = 'fff';
+        //we need at least 3 values for RGB
+        if(count($rgbaArray) >= 3) {
+            //get opacity value if avaiable, otherwise set it to one
+            if(isset($rgbaArray[3]) &&
+                is_numeric($rgbaArray[3])){
+                $opacity = $rgbaArray[3];
+            }
+            //make sure 3 values is valid
+            if(is_numeric($rgbaArray[0]) &&
+                is_numeric($rgbaArray[1]) &&
+                is_numeric($rgbaArray[2])
+            ) {
+                $color = sprintf("%x", ($rgbaArray[0] << 16) + ($rgbaArray[1] << 8) + $rgbaArray[2]);
+            }
         }
-
-        $r = implode(',',$rgbaArray);
-         $g=-1;
-         $b=-1;
-        if (is_array($r) && sizeof($r) == 3)
-            list($r, $g, $b) = $r;
-        $r = intval($r); $g = intval($g);
-        $b = intval($b);
-        $r = dechex($r<0?0:($r>255?255:$r));
-        $g = dechex($g<0?0:($g>255?255:$g));
-        $b = dechex($b<0?0:($b>255?255:$b));
-        $color = (strlen($r) < 2?'0':'').$r;
-        $color .= (strlen($g) < 2?'0':'').$g;
-        $color .= (strlen($b) < 2?'0':'').$b;
         $color =$color. "," .$opacity;
+
         return $color;
     }
-
     /**
      * @param $value
      * get product by type $value
