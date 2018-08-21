@@ -85,7 +85,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
             $subCategory = array(
                 'id' => $category->getId(),
                 'name' => $category->getName(),
-                'request_path' => $subcategorie->getRequestPath().$category->getRequestPath(),
+                'request_path' => $category->getRequestPath().$category->getRequestPath(),
                 'childCategories' => $this->getSubChildCategory($category->getId())
 
             );
@@ -342,5 +342,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         return json_encode($this->getHomeData(), true);
     }
 
+    /**
+     * @return string
+     *
+     *
+     */
+    public function getHomeMenu()
+    {
+        // Use Return instead of echo for getting response as JSON String.
+        // In Request, Accept and Content-Type must set to 'application/json'
+        return json_encode($this->getSubCategory(), true);
+    }
 
 }

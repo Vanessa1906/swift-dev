@@ -6,4 +6,10 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/gethomemenu/" method="GET">
+        <service class="Wsoftpro\Mobile\Api\HomepageInterface" method="getHomeMenu"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>

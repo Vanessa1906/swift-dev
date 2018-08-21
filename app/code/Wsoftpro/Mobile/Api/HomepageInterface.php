@@ -19,4 +19,10 @@ interface  HomepageInterface
      * @return string Greeting message with users name.
      */
     public function getHomepage();
+
+    /**
+     * @return mixed
+     *
+     */
+    public function getHomeMenu();
 }
