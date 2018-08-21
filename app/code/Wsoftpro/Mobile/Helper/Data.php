@@ -41,7 +41,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
     protected $_productCollectionFactory;
     protected $context;
     protected $resultJsonFactory;
+    protected $_category;
+    protected $_categoryRepository;
+    protected $session;
+
     public function __construct(
+        \Magento\Catalog\Helper\Category $category,
+        \Magento\Checkout\Model\Session $session,
+        \Magento\Catalog\Model\CategoryRepository $categoryRepository,
         \WeltPixel\OwlCarouselSlider\Helper\Custom $helperCustom,
         \WeltPixel\OwlCarouselSlider\Helper\Products $helperProducts,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productsCollectionFactory,
@@ -64,6 +71,48 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
         $this->_helperProducts  = $helperProducts;
         $this->_cartHelper = $context->getCartHelper();
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->_category = $category;
+        $this->_categoryRepository = $categoryRepository;
+        $this->_session = $session;
+    }
+
+    public function getSubCategory()
+    {
+        $data = array();
+        $subCategory = array();
+        $categories = $this->_category->getStoreCategories();
+        foreach($categories as $category) {
+            $subCategory = array(
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+                'request_path' => $subcategorie->getRequestPath().$category->getRequestPath(),
+                'childCategories' => $this->getSubChildCategory($category->getId())
+
+            );
+            array_push($data,$subCategory);
+
+
+        }
+        return $data;
+    }
+    public function getSubChildCategory($id){
+        $sub = array();
+        $subCategory = array();
+
+            $categoryObj = $this->_categoryRepository->get($id);
+            $subcategories = $categoryObj->getChildrenCategories();
+            foreach($subcategories as $subcategorie) {
+                $subCategory = array(
+                    'id' => $subcategorie->getId(),
+                    'name' => $subcategorie->getName(),
+                    'request_path' => $subcategorie->getRequestPath().$subcategorie->getRequestPath(),
+                    'childCategories' => $this->getSubChildCategory($subcategorie->getId())
+                );
+                array_push($sub,$subCategory);
+            }
+
+        return $sub;
+
     }
     /**
      *  get data Home page
@@ -260,6 +309,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Homep
      * */
     public function getSliderConfigOptions($type){
         return  $this->_helperProducts->getSliderConfigOptions($type);
+    }
+    public  function getItemcart(){
+        $items=  $this->_session->getQuote()->getAllItems();
+        $data = [];
+        $subTotal = $this->_session->getQuote()->getSubtotal();
+        $grandTotal = $this->_session->getQuote()->getGrandTotal();
+        $data['subTotal']=$subTotal;
+        $data['grandTotal']=$grandTotal;
+        $key=0;
+        foreach($items as $item) {
+            $data['item'][$key]['id']=$item->getProductId();
+            $data['item'][$key]['name']=$item->getName();
+            $data['item'][$key]['img']=$item->getImage();
+            $data['item'][$key]['sku']=$item->getSku();
+            $data['item'][$key]['qty']=$item->getQty();
+            $data['item'][$key]['price']=$item->getPrice();
+            $key++;
+        }
+        return $data;
     }
 
     /**
