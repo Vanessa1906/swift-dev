@@ -6,4 +6,105 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/gethomemenu/" method="GET">
+        <service class="Wsoftpro\Mobile\Api\HomepageInterface" method="getHomeMenu"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/getcart/" method="GET">
+        <service class="Wsoftpro\Mobile\Api\HomepageInterface" method="getCart"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/getfooter/" method="GET">
+        <service class="Wsoftpro\Mobile\Api\CategoriesInterface" method="getFooterBlock"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/getproduct/categoryId/:id/page/:page/customer/:customerId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\CategoriesInterface" method="getProductByCategory"/>
+        <resources>
+            <resource ref="anonymous"/>
+
+        </resources>
+    </route>
+
+    <route url="/V1/getslidercategory/categoryId/:id" method="GET">
+        <service class="Wsoftpro\Mobile\Api\CategoriesInterface" method="getSliderByCategoryId"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/getproductdetail/:productId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\ProductDetailInterface" method="getProductDetail"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/customerlogin/" method="POST">
+        <service class="Wsoftpro\Mobile\Api\CustomerSessionInterface" method="CustomerLogin"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/getcustomercart/:customerId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\CustomerSessionInterface" method="getCustomerCartItem"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/addtocart/productid/:id/customerid/:customerId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\AddToCartInterface" method="checkoutCart"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/getwishlistfor/customer/:customerId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\WishListInterface" method="getWishListForCustomer"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/addwishlistfor/customer/:customerId/product/:productId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\WishListInterface" method="addWishListForCustomer"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/deletewishlistfor/customer/:customerId/product/:productId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\WishListInterface" method="deleteWishListForCustomer"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/addcouponcode/:couponCode" method="GET">
+        <service class="Wsoftpro\Mobile\Api\CouponCodeInterface" method="addCouponPost"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/removecouponcode/:customerId" method="GET">
+        <service class="Wsoftpro\Mobile\Api\CouponCodeInterface" method="removeCouponPost"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/updatecart/" method="GET">
+        <service class="Wsoftpro\Mobile\Api\UpdateCartInterface" method="updateCart"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>
+        <!--<resource ref="anonymous"/>-->
+<!--<resource ref="Wsoftpro_Mobile::mobiledata"/>-->

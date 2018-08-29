@@ -12,11 +12,21 @@ namespace Wsoftpro\Mobile\Api;
 interface  HomepageInterface
 {
     /**
-     * Returns greeting message to user
+     * @return mixed
      *
-     * @api
-     * @param string $name Users name.
-     * @return string Greeting message with users name.
      */
     public function getHomepage();
+
+    /**
+     * @return mixed
+     *
+     */
+    public function getHomeMenu();
+
+    /**
+     * @return mixed
+     *
+     */
+    public function getCart();
+
 }

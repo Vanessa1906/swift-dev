@@ -52,6 +52,7 @@ class Custom extends \WeltPixel\OwlCarouselSlider\Helper\Custom
                 'items_brk3',
                 'nav_brk4',
                 'items_brk4',
+                'type_slider'
             ];
         }
         if(is_null($this->_configFieldsBanner)) {
@@ -88,7 +89,7 @@ class Custom extends \WeltPixel\OwlCarouselSlider\Helper\Custom
                 'button_color',
                 'background_color',
                 'border_color',
-                'type'
+                'type_banner'
             ];
         }
 

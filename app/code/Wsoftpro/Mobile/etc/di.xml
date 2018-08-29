@@ -3,6 +3,8 @@
     <preference for="Wsoftpro\Mobile\Api\HomepageInterface"
                 type="Wsoftpro\Mobile\Helper\Data" />
 
+    <preference for="Wsoftpro\Mobile\Api\CategoriesInterface"
+                type="Wsoftpro\Mobile\Helper\Category" />
 
     <preference for="WeltPixel\OwlCarouselSlider\Block\Adminhtml\Banner\Edit\Tab\Banner"
                 type="Wsoftpro\Mobile\Block\Adminhtml\Banner\Edit\Tab\Banner" />
@@ -12,5 +14,29 @@
 
     <preference for="WeltPixel\OwlCarouselSlider\Helper\Custom"
                 type="Wsoftpro\Mobile\Helper\Custom" />
+
+    <preference for="WeltPixel\OwlCarouselSlider\Controller\Adminhtml\Slider\Save"
+                type="Wsoftpro\Mobile\Controller\Adminhtml\Slider\Save" />
+
+    <preference for="Wsoftpro\Mobile\Api\ProductDetailInterface"
+                type="Wsoftpro\Mobile\Helper\Data" />
+
+    <preference for="Wsoftpro\Mobile\Api\CustomerSessionInterface"
+                type="Wsoftpro\Mobile\Helper\CustomerSession" />
+
+    <preference for="Wsoftpro\Mobile\Api\AddToCartInterface"
+                type="Wsoftpro\Mobile\Controller\Cart\Addtocart" />
+
+    <preference for="Wsoftpro\Mobile\Api\CouponCodeInterface"
+                type="Wsoftpro\Mobile\Controller\Cart\CouponPost" />
+
+    <preference for="Wsoftpro\Mobile\Api\UpdateCartInterface"
+                type="Wsoftpro\Mobile\Controller\Cart\UpdateCart" />
+
+    <preference for="Wsoftpro\Mobile\Api\WishListInterface"
+                type="Wsoftpro\Mobile\Model\WishList" />
+
+    <preference for="Wsoftpro\Mobile\Api\ProductDetailInterface"
+                type="Wsoftpro\Mobile\Model\ProductDetail" />
 
 </config>
